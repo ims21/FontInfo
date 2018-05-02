@@ -4,7 +4,7 @@ from . import _
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.00"
+VERSION = "1.02"
 #    Coded by ims (c)2018
 #
 #    This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ def main(session,**kwargs):
 
 def Plugins(path, **kwargs):
 	name = _("FontInfo")
-	descr = _("Display line height for fonts used in skin")
+	descr = _("Line height for fonts used in skin")
 	return [
 		PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc=main),
 	]
