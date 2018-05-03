@@ -4,7 +4,7 @@ from . import _
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.03"
+VERSION = "1.07"
 #    Coded by ims (c)2018
 #
 #    This program is free software; you can redistribute it and/or
@@ -108,24 +108,46 @@ class FontInfo(Screen, ConfigListScreen):
 	def testLength(self):
 		self.session.open(FontInfoTestLength)
 
+RES = "sd"
+if enigma.getDesktop(0).size().width() >= 1920:
+	RES = "fullhd"
+elif enigma.getDesktop(0).size().width() >= 1280:
+	RES = "hd"
+
 class FontInfoTestLength(Screen, ConfigListScreen):
-	skin = """
-	<screen name="FontInfoTestLength" position="center,center" size="710,490" title="FontInfo - tests" backgroundColor="#31000000">
-		<widget name="config" position="5,2" size="700,100" backgroundColor="#31000000"/>
-		<widget name="text" position="5,120" size="700,300" font="Regular;30" backgroundColor="#00404040"/>
-		<widget name="size" position="5,425" size="300,35" font="Regular;30" zPosition="1" backgroundColor="#31000000"/>
-		<ePixmap pixmap="skin_default/div-h.png" position="5,462" zPosition="2" size="700,2"/>
-		<widget name="key_red"   position="005,465" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
-		<widget name="key_green" position="155,465" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
-		<widget name="key_yellow" position="305,465" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="yellow" transparent="1"/>
-		<widget name="key_blue"  position="455,465" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
-		<widget name="HelpWindow" position="0,0" size="0,0"/>
-	</screen>"""
+	if RES == "fullhd":
+		skin = """
+		<screen name="FontInfoTestLength" position="center,center" size="1200,800" title="FontInfo - tests" backgroundColor="#00000000">
+			<widget name="config" position="10,5" size="1180,228" itemHeight="38" font="Regular;28" backgroundColor="#00000000"/>
+			<widget name="text" position="150,260" size="900,200" font="Regular;30" zPosition="1" backgroundColor="#00404040"/>
+			<widget name="size" position="150,470" size="900,35" font="Regular;30" zPosition="1" backgroundColor="#00000000"/>
+			<widget name="HelpWindow" position="center,670" size="120,0"/>
+			<widget name="key_red" position="5,770" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+		</screen>"""
+	elif RES == "hd":
+		skin = """
+		<screen name="FontInfoTestLength" position="center,center" size="1000,580" title="FontInfo - tests" backgroundColor="#00000000">
+			<widget name="config" position="10,5" size="980,150" backgroundColor="#00000000"/>
+			<widget name="text" position="50,170" size="700,200" font="Regular;20" zPosition="1" backgroundColor="#00404040"/>
+			<widget name="size" position="50,390" size="700,23" font="Regular;20" zPosition="1" backgroundColor="#00000000"/>
+			<widget name="HelpWindow" position="center,470" size="100,0"/>
+			<widget name="key_red" position="5,555" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="red" transparent="1"/>
+		</screen>"""
+	else:
+		skin = """
+		<screen name="FontInfoTestLength" position="center,center" size="610,515" title="FontInfo - tests" backgroundColor="#00000000">
+			<widget name="config" position="5,2" size="600,125" backgroundColor="#31000000"/>
+			<widget name="text" position="5,145" size="600,100" font="Regular;20" backgroundColor="#00404040"/>
+			<widget name="size" position="5,350" size="300,23" font="Regular;20" zPosition="1" backgroundColor="#00000000"/>
+			<ePixmap pixmap="skin_default/div-h.png" position="5,487" zPosition="2" size="700,2"/>
+			<widget name="HelpWindow" position="center,380" size="100,0"/>
+			<widget name="key_red" position="10,490" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+		</screen>"""
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
-		self.title = _("FontInfo %s - tests" ) % VERSION
+		self.title = _("FontInfo %s - test" ) % VERSION
 
 		### do not remove self["tmp"] !!!
 		self["tmp"] = Label("")
@@ -133,10 +155,33 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 
 		choicelist = []
 		for i in range(1, 81):
-			choicelist.append((str(i)))
-		config.plugins.fontinfo.size = NoSave(ConfigSelection(default = "30", choices = choicelist))
-		config.plugins.fontinfo.nowrap = NoSave(ConfigYesNo(default = False))
-		config.plugins.fontinfo.text = NoSave(ConfigText(default = "Hello", visible_width = 2000, fixed_size = False))
+			choicelist.append(("%d"%i,i))
+		fontsize = "20"
+		if RES == "fullhd":
+			fontsize = "30"
+		config.plugins.fontinfo.size = NoSave(ConfigSelection(default=fontsize, choices=choicelist))
+		config.plugins.fontinfo.nowrap = NoSave(ConfigYesNo(default=False))
+		config.plugins.fontinfo.text = NoSave(ConfigText(default = "Hello, here you can write text. If you want not so large Label, use UP on first item and change it.", visible_width = 2000, fixed_size = False))
+		choicelist = [("0","left"), (1, "center"),("2", "right"), ("3", "block")]
+		config.plugins.fontinfo.halign = NoSave(ConfigSelection(default="0", choices=choicelist))
+		choicelist = [("0","top"), (1, "center"),("2", "bottom")]
+		config.plugins.fontinfo.valign = NoSave(ConfigSelection(default="0", choices=choicelist))
+
+		choicelist = []
+		x_default = "600"
+		if RES == "fullhd":
+			x_default = "900"
+		for i in range(10, int(x_default) + 1, 10):
+			choicelist.append(("%d"%i,i))
+		config.plugins.fontinfo.lx = NoSave(ConfigSelection(default=x_default, choices=choicelist))
+		choicelist = []
+
+		for i in range(10, 201, 10):
+			choicelist.append(("%d"%i,i))
+		y_default = "200"
+		if RES == "sd":
+			y_default = "100"
+		config.plugins.fontinfo.ly = NoSave(ConfigSelection(default=y_default, choices=choicelist))
 
 		self["text"] = Label()
 		self["size"] = Label()
@@ -148,9 +193,16 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgFont, config.plugins.fontinfo.fonts ))
 		self.cfgSize = _("Set font size")
 		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgSize, config.plugins.fontinfo.size ))
-		self.cfgNowrap = _("No wrap")
+		self.cfgNowrap = _("noWrap")
 		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgNowrap, config.plugins.fontinfo.nowrap ))
-
+		self.cfgHalign = _("halign")
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgHalign, config.plugins.fontinfo.halign ))
+		self.cfgValign = _("valign")
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgValign, config.plugins.fontinfo.valign ))
+		self.cfgLx = _("Label width")
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLx, config.plugins.fontinfo.lx ))
+		self.cfgLy = _("Label height")
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLy, config.plugins.fontinfo.ly ))
 
 		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session = session, on_change = self.changes)
 
@@ -166,18 +218,16 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self.onLayoutFinish.append(self.setString)
 
 	def changes(self):
-		if self["config"].getCurrent()[0] == self.cfgFont:
+		if self["config"].getCurrent()[0] in (self.cfgFont, self.cfgSize, self.cfgNowrap, self.cfgText, self.cfgHalign, self.cfgValign):
 			self.setString()
-		elif self["config"].getCurrent()[0] == self.cfgSize:
-			self.setString()
-		elif self["config"].getCurrent()[0] == self.cfgNowrap:
-			self.setString()
-		elif self["config"].getCurrent()[0] == self.cfgText:
-			self.setString()
+		elif self["config"].getCurrent()[0] in (self.cfgLx, self.cfgLy):
+			self.setLabel()
 
 	def setString(self):
 		self["text"].instance.setNoWrap(self.nowrap())
 		self["text"].instance.setFont(self.font())
+		self["text"].instance.setHAlign(self.halign())
+		self["text"].instance.setVAlign(self.valign())
 		self["text"].setText("%s" % self.text())
 		self["size"].setText(("%s x %s (px)" % self.getLength()) + (" / %s" % self.lineHeight()))
 
@@ -193,6 +243,10 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["tmp"].instance.setFont(self.font())
 		return self["tmp"].instance.calculateSize().height()
 
+	def setLabel(self):
+		listsize = (int(self.lx()), int(self.ly()))
+		self["text"].instance.resize(enigma.eSize(*listsize))
+
 	def family(self):
 		return config.plugins.fontinfo.fonts.value.split(',')[0]
 	def size(self):
@@ -201,5 +255,11 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		return config.plugins.fontinfo.nowrap.value
 	def text(self):
 		return config.plugins.fontinfo.text.value
-	def setLabel(self):
-		pass
+	def halign(self):
+		return int(config.plugins.fontinfo.halign.value)
+	def valign(self):
+		return int(config.plugins.fontinfo.valign.value)
+	def lx(self):
+		return int(config.plugins.fontinfo.lx.value)
+	def ly(self):
+		return int(config.plugins.fontinfo.ly.value)

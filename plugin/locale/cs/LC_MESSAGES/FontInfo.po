@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 FontInfo Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-03 11:03+0200\n"
-"PO-Revision-Date: 2018-05-03 11:04+0200\n"
+"POT-Creation-Date: 2018-05-03 15:45+0200\n"
+"PO-Revision-Date: 2018-05-03 15:45+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -37,8 +37,8 @@ msgid "Tests"
 msgstr "Testy"
 
 #, python-format
-msgid "FontInfo %s - tests"
-msgstr "FontInfo %s - testy"
+msgid "FontInfo %s - test"
+msgstr "FontInfo %s - test"
 
 msgid "Write text"
 msgstr "Zapište text"
@@ -46,5 +46,20 @@ msgstr "Zapište text"
 msgid "Set font size"
 msgstr "Zvolte velikost písma"
 
-msgid "No wrap"
-msgstr "Nezalamovat"
+msgid "noWrap"
+msgstr ""
+
+msgid "halign"
+msgstr ""
+
+msgid "valign"
+msgstr ""
+
+msgid "Label width"
+msgstr ""
+
+msgid "Label height"
+msgstr ""
+
+#~ msgid "No wrap"
+#~ msgstr "Nezalamovat"

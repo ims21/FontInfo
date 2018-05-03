@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-03 11:03+0200\n"
+"POT-Creation-Date: 2018-05-03 15:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgid "Tests"
 msgstr ""
 
 #, python-format
-msgid "FontInfo %s - tests"
+msgid "FontInfo %s - test"
 msgstr ""
 
 msgid "Write text"
@@ -49,5 +49,17 @@ msgstr ""
 msgid "Set font size"
 msgstr ""
 
-msgid "No wrap"
+msgid "noWrap"
+msgstr ""
+
+msgid "halign"
+msgstr ""
+
+msgid "valign"
+msgstr ""
+
+msgid "Label width"
+msgstr ""
+
+msgid "Label height"
 msgstr ""
