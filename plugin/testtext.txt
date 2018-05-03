@@ -1,0 +1,1 @@
+You can write text to Label. If you want not so large Label, use UP on first item and change it. This text is in: /usr/share/enigma2/python/Plugins/Extensions/FontInfo/testtext.txt. If You want add text manualy only, remove this file.

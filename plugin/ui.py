@@ -1,10 +1,10 @@
 # for localized messages
-from . import _
+from . import _ , PATH
 #################################################################################
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.08"
+VERSION = "1.09"
 #    Coded by ims (c)2018
 #
 #    This program is free software; you can redistribute it and/or
@@ -26,8 +26,9 @@ from Components.Label import Label
 from Components.Pixmap import Pixmap
 import skin
 from enigma import getDesktop, gFont, eSize
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists, SCOPE_PLUGINS
 import xml.etree.cElementTree as ET
+
 
 class FontInfo(Screen, ConfigListScreen):
 	skin = """
@@ -123,6 +124,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			<widget name="size" position="150,470" size="900,35" font="Regular;30" zPosition="1" backgroundColor="#00000000"/>
 			<widget name="HelpWindow" position="center,670" size="120,0"/>
 			<widget name="key_red" position="5,770" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+			<widget name="key_yellow" position="400,770" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="yellow" transparent="1"/>
 		</screen>"""
 	elif RES == "hd":
 		skin = """
@@ -132,6 +134,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			<widget name="size" position="50,390" size="700,23" font="Regular;20" zPosition="1" backgroundColor="#00000000"/>
 			<widget name="HelpWindow" position="center,470" size="100,0"/>
 			<widget name="key_red" position="5,555" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="red" transparent="1"/>
+			<widget name="key_yellow" position="300,555" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="yellow" transparent="1"/>
 		</screen>"""
 	else:
 		skin = """
@@ -141,7 +144,8 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			<widget name="size" position="5,350" size="300,23" font="Regular;20" zPosition="1" backgroundColor="#00000000"/>
 			<ePixmap pixmap="skin_default/div-h.png" position="5,487" zPosition="2" size="700,2"/>
 			<widget name="HelpWindow" position="center,380" size="100,0"/>
-			<widget name="key_red" position="10,490" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+			<widget name="key_red" position="10,490" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="red" transparent="1"/>
+			<widget name="key_yellow" position="300,490" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="yellow" transparent="1"/>
 		</screen>"""
 
 	def __init__(self, session):
@@ -161,7 +165,13 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			fontsize = "30"
 		config.plugins.fontinfo.size = NoSave(ConfigSelection(default=fontsize, choices=choicelist))
 		config.plugins.fontinfo.nowrap = NoSave(ConfigYesNo(default=False))
-		config.plugins.fontinfo.text = NoSave(ConfigText(default = "You can write text to Label. If you want not so large Label, use UP on first item and change it.", visible_width = 2000, fixed_size = False))
+		testText = "Write text to Label. If you want not so large Label, use UP and change it. You can put text to testtext.txt under plugin directory."
+		path = resolveFilename(SCOPE_PLUGINS, "%s/testtext.txt" % PATH)
+		if fileExists(path):
+			fi = open(path,"r")
+			testText = fi.readline()
+			fi.close()
+		config.plugins.fontinfo.text = NoSave(ConfigText(default = testText, visible_width = 80, fixed_size = False))
 		choicelist = [("0","left"), (1, "center"),("2", "right"), ("3", "block")]
 		config.plugins.fontinfo.halign = NoSave(ConfigSelection(default="0", choices=choicelist))
 		choicelist = [("0","top"), (1, "center"),("2", "bottom")]
@@ -210,9 +220,11 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			{
 				"cancel": self.close,
 				"red": self.close,
+				"yellow": self.clearText
 			}, -2)
 
 		self["key_red"] = Label(_("Cancel"))
+		self["key_yellow"] = Label(_("Clear"))
 		self["HelpWindow"] = Pixmap()
 		self["HelpWindow"].hide()
 		self.onLayoutFinish.append(self.setString)
@@ -230,6 +242,11 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["text"].instance.setVAlign(self.valign())
 		self["text"].setText("%s" % self.text())
 		self["size"].setText(("%s x %s (px)" % self.getLength()) + (" / %s" % self.lineHeight()))
+
+	def clearText(self):
+		config.plugins.fontinfo.text.deleteAllChars()
+		config.plugins.fontinfo.text.setValue("")
+		self.setString()
 
 	def getLength(self):
 		return self["text"].instance.calculateSize().width(), self["text"].instance.calculateSize().height()
