@@ -4,7 +4,7 @@ from . import _
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.07"
+VERSION = "1.08"
 #    Coded by ims (c)2018
 #
 #    This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 import skin
-import enigma
+from enigma import getDesktop, gFont, eSize
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists
 import xml.etree.cElementTree as ET
 
@@ -88,7 +88,7 @@ class FontInfo(Screen, ConfigListScreen):
 		self["fontsinfo"].setText(info)
 
 	def lineHeight(self, size, family):
-		fnt = enigma.gFont(family, size)
+		fnt = gFont(family, size)
 		self["tmp"].instance.setFont(fnt)
 		return self["tmp"].instance.calculateSize().height()
 
@@ -109,9 +109,9 @@ class FontInfo(Screen, ConfigListScreen):
 		self.session.open(FontInfoTestLength)
 
 RES = "sd"
-if enigma.getDesktop(0).size().width() >= 1920:
+if getDesktop(0).size().width() >= 1920:
 	RES = "fullhd"
-elif enigma.getDesktop(0).size().width() >= 1280:
+elif getDesktop(0).size().width() >= 1280:
 	RES = "hd"
 
 class FontInfoTestLength(Screen, ConfigListScreen):
@@ -161,7 +161,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			fontsize = "30"
 		config.plugins.fontinfo.size = NoSave(ConfigSelection(default=fontsize, choices=choicelist))
 		config.plugins.fontinfo.nowrap = NoSave(ConfigYesNo(default=False))
-		config.plugins.fontinfo.text = NoSave(ConfigText(default = "Hello, here you can write text. If you want not so large Label, use UP on first item and change it.", visible_width = 2000, fixed_size = False))
+		config.plugins.fontinfo.text = NoSave(ConfigText(default = "You can write text to Label. If you want not so large Label, use UP on first item and change it.", visible_width = 2000, fixed_size = False))
 		choicelist = [("0","left"), (1, "center"),("2", "right"), ("3", "block")]
 		config.plugins.fontinfo.halign = NoSave(ConfigSelection(default="0", choices=choicelist))
 		choicelist = [("0","top"), (1, "center"),("2", "bottom")]
@@ -235,7 +235,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		return self["text"].instance.calculateSize().width(), self["text"].instance.calculateSize().height()
 
 	def font(self):
-		return enigma.gFont(self.family(), self.size())
+		return gFont(self.family(), self.size())
 
 	def lineHeight(self):
 		self["tmp"].instance.setNoWrap(1)
@@ -245,7 +245,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 
 	def setLabel(self):
 		listsize = (int(self.lx()), int(self.ly()))
-		self["text"].instance.resize(enigma.eSize(*listsize))
+		self["text"].instance.resize(eSize(*listsize))
 
 	def family(self):
 		return config.plugins.fontinfo.fonts.value.split(',')[0]
