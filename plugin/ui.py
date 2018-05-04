@@ -241,7 +241,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["text"].instance.setHAlign(self.halign())
 		self["text"].instance.setVAlign(self.valign())
 		self["text"].setText("%s" % self.text())
-		self["size"].setText(("%s x %s (px)" % self.getLength()) + (" / %s" % self.lineHeight()))
+		self["size"].setText(("%s x %s (px)" % self.getLength()) + (" | %s" % self.lineHeight()))
 
 	def clearText(self):
 		config.plugins.fontinfo.text.deleteAllChars()
