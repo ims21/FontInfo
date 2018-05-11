@@ -3,7 +3,7 @@ import setup_translate
 
 pkg = 'Extensions.FontInfo'
 setup (name = 'enigma2-plugin-extensions-fontinfo',
-       version = '1.13',
+       version = '1.14',
        description = 'display lineheight for font size',
        packages = [pkg],
        package_dir = {pkg: 'plugin'},
