@@ -4,7 +4,7 @@ from . import _ , PATH
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.10"
+VERSION = "1.13"
 #    Coded by ims (c)2018
 #
 #    This program is free software; you can redistribute it and/or
@@ -130,6 +130,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			<widget name="HelpWindow" position="center,670" size="120,0"/>
 			<widget name="key_red" position="5,770" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
 			<widget name="key_yellow" position="400,770" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="yellow" transparent="1"/>
+			<widget name="key_blue"  position="600,770" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
 		</screen>"""
 	elif RES == "hd":
 		skin = """
@@ -140,6 +141,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			<widget name="HelpWindow" position="center,470" size="100,0"/>
 			<widget name="key_red" position="5,555" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="red" transparent="1"/>
 			<widget name="key_yellow" position="300,555" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="yellow" transparent="1"/>
+			<widget name="key_blue"  position="450,555" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
 		</screen>"""
 	else:
 		skin = """
@@ -151,6 +153,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			<widget name="HelpWindow" position="center,380" size="100,0"/>
 			<widget name="key_red" position="10,490" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="red" transparent="1"/>
 			<widget name="key_yellow" position="300,490" zPosition="2" size="150,23" valign="center" halign="center" font="Regular;20" foregroundColor="yellow" transparent="1"/>
+			<widget name="key_blue"  position="450,490" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
 		</screen>"""
 
 	def __init__(self, session):
@@ -162,6 +165,10 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["tmp"] = Label("")
 		###
 
+		self.testText = "Write text to Label. If you want not so large Label, use UP and change it. You can put text to %s under plugin directory." % FILENAME
+		self.testText = self.readText() or self.testText
+		cfg.text = NoSave(ConfigText(default = self.testText, visible_width = 80, fixed_size = False))
+
 		choicelist = []
 		for i in range(1, 81):
 			choicelist.append(("%d"%i,i))
@@ -170,13 +177,6 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 			fontsize = "30"
 		cfg.size = NoSave(ConfigSelection(default=fontsize, choices=choicelist))
 		cfg.nowrap = NoSave(ConfigYesNo(default=False))
-		testText = "Write text to Label. If you want not so large Label, use UP and change it. You can put text to %s under plugin directory." % FILENAME
-		path = resolveFilename(SCOPE_PLUGINS, "%s/%s" % (PATH, FILENAME))
-		if fileExists(path):
-			fi = open(path,"r")
-			testText = fi.readline()
-			fi.close()
-		cfg.text = NoSave(ConfigText(default = testText, visible_width = 80, fixed_size = False))
 		choicelist = [("0","left"), (1, "center"),("2", "right"), ("3", "block")]
 		cfg.halign = NoSave(ConfigSelection(default="0", choices=choicelist))
 		choicelist = [("0","top"), (1, "center"),("2", "bottom")]
@@ -202,6 +202,26 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["size"] = Label()
 
 		self.FontInfoTestLengthCfg = []
+		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session = self.session, on_change = self.changes)
+		self.createCFG()
+
+		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
+			{
+				"cancel": self.close,
+				"red": self.close,
+				"yellow": self.clearText,
+				"blue": self.reloadText
+			}, -2)
+
+		self["key_red"] = Label(_("Cancel"))
+		self["key_yellow"] = Label(_("Clear"))
+		self["key_blue"] = Label(_("Reload"))
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
+		self.onLayoutFinish.append(self.setString)
+
+	def createCFG(self):
+		self.FontInfoTestLengthCfg = []
 		self.cfgText = _("Write text")
 		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgText, cfg.text ))
 		self.cfgFont = _("Select font")
@@ -218,21 +238,8 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLx, cfg.lx ))
 		self.cfgLy = _("Label height")
 		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLy, cfg.ly ))
-
-		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session = session, on_change = self.changes)
-
-		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
-			{
-				"cancel": self.close,
-				"red": self.close,
-				"yellow": self.clearText
-			}, -2)
-
-		self["key_red"] = Label(_("Cancel"))
-		self["key_yellow"] = Label(_("Clear"))
-		self["HelpWindow"] = Pixmap()
-		self["HelpWindow"].hide()
-		self.onLayoutFinish.append(self.setString)
+		self["config"].list = self.FontInfoTestLengthCfg
+		self["config"].l.setList(self.FontInfoTestLengthCfg)
 
 	def changes(self):
 		if self["config"].getCurrent()[0] in (self.cfgFont, self.cfgSize, self.cfgNowrap, self.cfgText, self.cfgHalign, self.cfgValign):
@@ -246,12 +253,32 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["text"].instance.setHAlign(self.halign())
 		self["text"].instance.setVAlign(self.valign())
 		self["text"].setText("%s" % self.text())
-		self["size"].setText(("%s x %s (px)" % self.getLength()) + (" | %s" % self.lineHeight()))
+		x, y = self.getLength()
+		if x > 0:
+			self["size"].setText(("%s x %s (px)" % (x, y)) + (" | %s" % self.lineHeight()))
+		else:
+			self["size"].setText("")
 
 	def clearText(self):
 		cfg.text.deleteAllChars()
-		cfg.text.setValue("")
+		cfg.text.value=""
+		self.createCFG()
 		self.setString()
+
+	def reloadText(self):
+		cfg.text.deleteAllChars()
+		cfg.text.value=self.readText()
+		self.createCFG()
+		self.setString()
+
+	def readText(self):
+		text = ""
+		path = resolveFilename(SCOPE_PLUGINS, "%s/%s" % (PATH, FILENAME))
+		if fileExists(path):
+			fi = open(path,"r")
+			text = fi.readline()
+			fi.close()
+		return text
 
 	def getLength(self):
 		return self["text"].instance.calculateSize().width(), self["text"].instance.calculateSize().height()
