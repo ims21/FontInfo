@@ -133,7 +133,7 @@ elif getDesktop(0).size().width() >= 1280:
 class FontInfoTestLength(Screen, ConfigListScreen):
 	if RES == "fullhd":
 		skin = """
-		<screen name="FontInfoTestLength" position="center,center" size="1200,800" title="FontInfo - tests" backgroundColor="#00000000">
+		<screen name="FontInfoTestLength" position="center,center" size="1200,800" title="FontInfo - Tests screen" backgroundColor="#00000000">
 			<widget name="config" position="10,5" size="1180,228" itemHeight="38" font="Regular;28" backgroundColor="#00000000"/>
 			<widget name="text" position="150,260" size="900,200" font="Regular;30" zPosition="1" backgroundColor="#00404040"/>
 			<widget name="size" position="150,470" size="900,35" font="Regular;30" zPosition="1" backgroundColor="#00000000"/>
@@ -144,7 +144,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		</screen>"""
 	elif RES == "hd":
 		skin = """
-		<screen name="FontInfoTestLength" position="center,center" size="1000,580" title="FontInfo - tests" backgroundColor="#00000000">
+		<screen name="FontInfoTestLength" position="center,center" size="1000,580" title="FontInfo - Tests screen" backgroundColor="#00000000">
 			<widget name="config" position="10,5" size="980,150" backgroundColor="#00000000"/>
 			<widget name="text" position="50,170" size="700,200" font="Regular;20" zPosition="1" backgroundColor="#00404040"/>
 			<widget name="size" position="50,390" size="700,23" font="Regular;20" zPosition="1" backgroundColor="#00000000"/>
@@ -155,7 +155,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		</screen>"""
 	else:
 		skin = """
-		<screen name="FontInfoTestLength" position="center,center" size="610,515" title="FontInfo - tests" backgroundColor="#00000000">
+		<screen name="FontInfoTestLength" position="center,center" size="610,515" title="FontInfo - Tests screen" backgroundColor="#00000000">
 			<widget name="config" position="5,2" size="600,125" backgroundColor="#31000000"/>
 			<widget name="text" position="5,145" size="600,100" font="Regular;20" backgroundColor="#00404040"/>
 			<widget name="size" position="5,350" size="300,23" font="Regular;20" zPosition="1" backgroundColor="#00000000"/>
@@ -169,7 +169,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
-		self.title = _("FontInfo %s - test" ) % VERSION
+		self.title = _("FontInfo %s - Test screen" ) % VERSION
 
 		### do not remove self["tmp"] !!!
 		self["tmp"] = Label("")

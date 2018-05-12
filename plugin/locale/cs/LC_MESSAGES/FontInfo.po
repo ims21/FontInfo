@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 FontInfo Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-03 15:45+0200\n"
-"PO-Revision-Date: 2018-05-03 15:45+0200\n"
+"POT-Creation-Date: 2018-05-12 07:56+0200\n"
+"PO-Revision-Date: 2018-05-12 07:59+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -22,7 +22,7 @@ msgstr "Zobrazení výšky řádku pro fonty použité ve skinu"
 
 #, python-format
 msgid "FontInfo %s"
-msgstr ""
+msgstr "FontInfo %s"
 
 msgid "Font size / line height (px)"
 msgstr "Velikost fontu / výška řádku (px)"
@@ -37,8 +37,14 @@ msgid "Tests"
 msgstr "Testy"
 
 #, python-format
-msgid "FontInfo %s - test"
-msgstr "FontInfo %s - test"
+msgid "FontInfo %s - Test screen"
+msgstr "FontInfo %s -Testovací okno"
+
+msgid "Clear"
+msgstr "Vyčistit"
+
+msgid "Reload"
+msgstr "Znovu načíst"
 
 msgid "Write text"
 msgstr "Zapište text"
