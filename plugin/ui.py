@@ -58,7 +58,6 @@ class FontInfo(Screen, ConfigListScreen):
 		self["tmp"] = Label("")
 		###
 
-
 		choicelist = self.readFonts()
 		cfg.fonts = NoSave(ConfigSelection(default = choicelist[0], choices = choicelist))
 
@@ -66,10 +65,9 @@ class FontInfo(Screen, ConfigListScreen):
 		self["fontsinfo"] = Label()
 
 		self.FontInfoCfg = [getConfigListEntry(_("Select font"), cfg.fonts )]
-
 		ConfigListScreen.__init__(self, self.FontInfoCfg, session = session, on_change = self.displayValues)
 
-		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
+		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
 				"cancel": self.close,
 				"red": self.close,
@@ -215,7 +213,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session = self.session, on_change = self.changes)
 		self.createCFG()
 
-		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
+		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
 				"cancel": self.close,
 				"red": self.close,
