@@ -4,8 +4,8 @@ from . import _ , PATH
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.14"
-#    Coded by ims (c)2018
+VERSION = "1.15"
+#    Coded by ims (c)2018-2020
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -113,10 +113,11 @@ class FontInfo(Screen, ConfigListScreen):
 	def parseSkin(self, skin, list):
 		root = ET.parse(skin).getroot()
 		fonts = root.find('fonts')
-		for font in fonts.findall('font'):
-			rec = ("%s, %s") % (font.attrib.get('name', None), font.attrib.get('filename', None))
-			if not list.count(rec):
-				list.append(rec)
+		if fonts:
+			for font in fonts.findall('font'):
+				rec = ("%s, %s") % (font.attrib.get('name', None), font.attrib.get('filename', None))
+				if not list.count(rec):
+					list.append(rec)
 		return list
 
 	def testLength(self):
