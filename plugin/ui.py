@@ -4,7 +4,7 @@ from . import _ , PATH
 #
 #    FontInfo - plugin for Enigma2
 #    version:
-VERSION = "1.15"
+VERSION = "1.16"
 #    Coded by ims (c)2018-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ from Components.config import getConfigListEntry, NoSave, ConfigSubsection, conf
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
+from Components.Sources.Boolean import Boolean
 import skin
 from enigma import getDesktop, gFont, eSize
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists, SCOPE_PLUGINS
@@ -227,6 +228,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["key_blue"] = Label(_("Reload"))
 		self["HelpWindow"] = Pixmap()
 		self["HelpWindow"].hide()
+		self["VKeyIcon"] = Boolean(False)
 		self.onLayoutFinish.append(self.setString)
 
 	def createCFG(self):
