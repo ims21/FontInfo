@@ -2,10 +2,10 @@
 from . import _ , PATH
 #################################################################################
 #
-#    FontInfo - plugin for Enigma2
+#    FontInfo - plugin for PLi enigma2
 #    version:
-VERSION = "1.16"
-#    Coded by ims (c)2018-2020
+VERSION = "1.17"
+#    Coded by ims (c)2018-2021
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -98,20 +98,26 @@ class FontInfo(Screen, ConfigListScreen):
 		return self["tmp"].instance.calculateSize().height()
 
 	def readFonts(self):
-		list = []
+		fontslist = []
 		path = config.skin.primary_skin.value.split('/')[0]
-		if path is ".":
-			skin = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default.xml")
-		else:
-			skin = resolveFilename(SCOPE_CURRENT_SKIN, config.skin.primary_skin.value)
+		skin = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default.xml" if path is "." else config.skin.primary_skin.value)
 		if fileExists(skin):
-			list = self.parseSkin(skin, list)
+			fontslist = self.parseSkin(skin)
+			if not len(fontslist): # try non standard fonts info placement
+				root = ET.parse(skin).getroot()
+				files = root.findall('include')
+				for file in files:
+					path = root.find('include').attrib.get('filename', None)
+					skin = resolveFilename(SCOPE_CURRENT_SKIN, path)
+					if fileExists(skin):
+						fontslist += self.parseSkin(skin)
 		skin = resolveFilename(SCOPE_CURRENT_SKIN, "skin_display.xml")
 		if fileExists(skin):
-			list += self.parseSkin(skin, list)
-		return list
+			fontslist += self.parseSkin(skin)
+		return list(set(fontslist))
 
-	def parseSkin(self, skin, list):
+	def parseSkin(self, skin):
+		list = []
 		root = ET.parse(skin).getroot()
 		fonts = root.find('fonts')
 		if fonts:
