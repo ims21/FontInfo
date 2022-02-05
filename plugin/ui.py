@@ -4,8 +4,8 @@ from . import _ , PATH
 #
 #    FontInfo - plugin for PLi enigma2
 #    version:
-VERSION = "1.17"
-#    Coded by ims (c)2018-2021
+VERSION = "1.18"
+#    Coded by ims (c)2018-2022
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -114,18 +114,27 @@ class FontInfo(Screen, ConfigListScreen):
 		skin = resolveFilename(SCOPE_CURRENT_SKIN, "skin_display.xml")
 		if fileExists(skin):
 			fontslist += self.parseSkin(skin)
-		return list(set(fontslist))
+
+		 # unfortunately, both variants changing order
+#		return list(dict.fromkeys(fontslist))
+#		return list(set(fontslist))
+		return self.getUniqueList(fontslist)
+
+	def getUniqueList(self, originalList):
+		uniqueList = []
+		[uniqueList.append(item) for item in originalList if item not in uniqueList]
+		return uniqueList
 
 	def parseSkin(self, skin):
-		list = []
+		fontList = []
 		root = ET.parse(skin).getroot()
 		fonts = root.find('fonts')
 		if fonts:
 			for font in fonts.findall('font'):
 				rec = ("%s, %s") % (font.attrib.get('name', None), font.attrib.get('filename', None))
-				if not list.count(rec):
-					list.append(rec)
-		return list
+				if not fontList.count(rec):
+					fontList.append(rec)
+		return fontList
 
 	def testLength(self):
 		self.session.open(FontInfoTestLength)
