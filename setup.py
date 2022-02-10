@@ -2,7 +2,7 @@ from distutils.core import setup
 import setup_translate
 
 pkg = 'Extensions.FontInfo'
-setup (name = 'enigma2-plugin-extensions-fontinfo',
+setup(name = 'enigma2-plugin-extensions-fontinfo',
 	version = '1.18',
 	description = 'display lineheight for font size',
 	packages = [pkg],

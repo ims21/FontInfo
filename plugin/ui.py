@@ -50,7 +50,7 @@ class FontInfo(Screen, ConfigListScreen):
 		<widget name="key_blue"  position="455,495" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
 	</screen>"""
 
-	def __init__(self, session, ):
+	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
 		self.title = _("FontInfo %s") % VERSION
@@ -60,13 +60,13 @@ class FontInfo(Screen, ConfigListScreen):
 		###
 
 		choicelist = self.readFonts()
-		cfg.fonts = NoSave(ConfigSelection(default = choicelist[0], choices = choicelist))
+		cfg.fonts = NoSave(ConfigSelection(default=choicelist[0], choices=choicelist))
 
 		self["info"] = Label(_("Font size / line height (px)"))
 		self["fontsinfo"] = Label()
 
-		self.FontInfoCfg = [getConfigListEntry(_("Select font"), cfg.fonts )]
-		ConfigListScreen.__init__(self, self.FontInfoCfg, session = session, on_change = self.displayValues)
+		self.FontInfoCfg = [getConfigListEntry(_("Select font"), cfg.fonts)]
+		ConfigListScreen.__init__(self, self.FontInfoCfg, session=session, on_change=self.displayValues)
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
@@ -84,11 +84,11 @@ class FontInfo(Screen, ConfigListScreen):
 		self["tmp"].instance.setNoWrap(1)
 		self["tmp"].setText("W")
 		info = ""
-		for h in range(1,21):
-			info += ("%02d / %02d\t") % ( h, self.lineHeight(h, family))
-			info += ("%02d / %02d\t") % ( h+20, self.lineHeight(h+20, family))
-			info += ("%02d / %02d\t") % ( h+40, self.lineHeight(h+40, family))
-			info += ("%02d / %02d") % ( h+60, self.lineHeight(h+60, family))
+		for h in range(1, 21):
+			info += ("%02d / %02d\t") % (h, self.lineHeight(h, family))
+			info += ("%02d / %02d\t") % (h + 20, self.lineHeight(h+20, family))
+			info += ("%02d / %02d\t") % (h + 40, self.lineHeight(h+40, family))
+			info += ("%02d / %02d") % (h + 60, self.lineHeight(h+60, family))
 			info += ("\n")
 		self["fontsinfo"].setText(info)
 
@@ -184,7 +184,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
-		self.title = _("FontInfo %s - Test screen" ) % VERSION
+		self.title = _("FontInfo %s - Test screen") % VERSION
 
 		### do not remove self["tmp"] !!!
 		self["tmp"] = Label("")
@@ -192,19 +192,19 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 
 		self.testText = "Write text to Label. If you want not so large Label, use UP and change it. You can put text to %s under plugin directory." % FILENAME
 		self.testText = self.readText() or self.testText
-		cfg.text = NoSave(ConfigText(default = self.testText, visible_width = 80, fixed_size = False))
+		cfg.text = NoSave(ConfigText(default=self.testText, visible_width=80, fixed_size=False))
 
 		choicelist = []
 		for i in range(1, 81):
-			choicelist.append(("%d"%i,i))
+			choicelist.append(("%d" % i, i))
 		fontsize = "20"
 		if RES == "fullhd":
 			fontsize = "30"
 		cfg.size = NoSave(ConfigSelection(default=fontsize, choices=choicelist))
 		cfg.nowrap = NoSave(ConfigYesNo(default=False))
-		choicelist = [("0","left"), (1, "center"),("2", "right"), ("3", "block")]
+		choicelist = [("0", "left"), (1, "center"), ("2", "right"), ("3", "block")]
 		cfg.halign = NoSave(ConfigSelection(default="0", choices=choicelist))
-		choicelist = [("0","top"), (1, "center"),("2", "bottom")]
+		choicelist = [("0", "top"), (1, "center"), ("2", "bottom")]
 		cfg.valign = NoSave(ConfigSelection(default="0", choices=choicelist))
 
 		choicelist = []
@@ -212,12 +212,12 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		if RES == "fullhd":
 			x_default = "900"
 		for i in range(10, int(x_default) + 1, 10):
-			choicelist.append(("%d"%i,i))
+			choicelist.append(("%d" % i, i))
 		cfg.lx = NoSave(ConfigSelection(default=x_default, choices=choicelist))
 
 		choicelist = []
 		for i in range(10, 201, 10):
-			choicelist.append(("%d"%i,i))
+			choicelist.append(("%d" % i, i))
 		y_default = "200"
 		if RES == "sd":
 			y_default = "100"
@@ -227,7 +227,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["size"] = Label()
 
 		self.FontInfoTestLengthCfg = []
-		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session = self.session, on_change = self.changes)
+		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session=self.session, on_change=self.changes)
 		self.createCFG()
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -249,21 +249,21 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 	def createCFG(self):
 		self.FontInfoTestLengthCfg = []
 		self.cfgText = _("Write text")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgText, cfg.text ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgText, cfg.text))
 		self.cfgFont = _("Select font")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgFont, cfg.fonts ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgFont, cfg.fonts))
 		self.cfgSize = _("Set font size")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgSize, cfg.size ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgSize, cfg.size))
 		self.cfgNowrap = _("noWrap")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgNowrap, cfg.nowrap ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgNowrap, cfg.nowrap))
 		self.cfgHalign = _("halign")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgHalign, cfg.halign ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgHalign, cfg.halign))
 		self.cfgValign = _("valign")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgValign, cfg.valign ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgValign, cfg.valign))
 		self.cfgLx = _("Label width")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLx, cfg.lx ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLx, cfg.lx))
 		self.cfgLy = _("Label height")
-		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLy, cfg.ly ))
+		self.FontInfoTestLengthCfg.append(getConfigListEntry(self.cfgLy, cfg.ly))
 		self["config"].list = self.FontInfoTestLengthCfg
 		self["config"].l.setList(self.FontInfoTestLengthCfg)
 
@@ -301,7 +301,7 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		text = ""
 		path = resolveFilename(SCOPE_PLUGINS, "%s/%s" % (PATH, FILENAME))
 		if fileExists(path):
-			fi = open(path,"r")
+			fi = open(path, "r")
 			text = fi.readline()
 			fi.close()
 		return text
