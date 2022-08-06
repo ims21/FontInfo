@@ -224,6 +224,8 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 
 		self["text"] = Label()
 		self["size"] = Label()
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
 
 		self.FontInfoTestLengthCfg = []
 		ConfigListScreen.__init__(self, self.FontInfoTestLengthCfg, session=self.session, on_change=self.changes)
@@ -240,8 +242,6 @@ class FontInfoTestLength(Screen, ConfigListScreen):
 		self["key_red"] = Label(_("Cancel"))
 		self["key_yellow"] = Label(_("Clear"))
 		self["key_blue"] = Label(_("Reload"))
-		self["HelpWindow"] = Pixmap()
-		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
 		self.onLayoutFinish.append(self.setString)
 
